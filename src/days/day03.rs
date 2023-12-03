@@ -48,11 +48,7 @@ fn find_all_gears(input: &str) -> Vec<Gear> {
     for (current_index, line) in lines.iter().enumerate() {
         for (index, c) in line.char_indices() {
             if c == '*' {
-                if index > 0 {
-                    start = index - 1;
-                } else {
-                    start = index;
-                }
+                start = index.saturating_sub(1);
                 if index < input.len() {
                     end = index + 1;
                 } else {
@@ -128,7 +124,7 @@ fn find_number_indexes(input: &str, line_num: usize) -> Vec<Number> {
                         result.push(Number {
                             line: line_num,
                             num,
-                            position: (start, index),
+                            position: (start.saturating_sub(1), index),
                         });
                     }
                 }
@@ -144,7 +140,7 @@ fn find_number_indexes(input: &str, line_num: usize) -> Vec<Number> {
             result.push(Number {
                 line: line_num,
                 num,
-                position: (start, end),
+                position: (start.saturating_sub(1), end),
             });
         }
     }
@@ -297,4 +293,16 @@ fn test_sample_sol2() {
 ...$.*....
 .664.598..";
     assert_eq!(467835, solve_part2(input));
+}
+
+fn test_sol1() {
+    let input = include_str!("../../input/input03.txt");
+    let sol1 = solve_part1(input);
+    assert_eq!(554003, sol1);
+}
+
+fn test_sol2() {
+    let input = include_str!("../../input/input03.txt");
+    let sol2 = solve_part2(input);
+    assert_eq!(8726351, sol2);
 }
