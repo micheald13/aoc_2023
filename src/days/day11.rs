@@ -48,10 +48,11 @@ fn expand_galaxy(
     galaxy: &GalaxyPos,
     empty_rows: &HashSet<usize>,
     empty_columns: &HashSet<usize>,
+    size: usize,
 ) -> GalaxyPos {
     GalaxyPos {
-        x: galaxy.x + 1 * empty_rows.iter().filter(|p| p < &&galaxy.x).count(),
-        y: galaxy.y + 1 * empty_columns.iter().filter(|p| p < &&galaxy.y).count(),
+        x: galaxy.x + size * empty_rows.iter().filter(|p| p < &&galaxy.x).count(),
+        y: galaxy.y + size * empty_columns.iter().filter(|p| p < &&galaxy.y).count(),
     }
 }
 
@@ -67,7 +68,6 @@ fn calc_all_distances(galaxies: Vec<GalaxyPos>) -> usize {
 
 pub fn solve() -> SolutionPair {
     // Your solution here...
-    let sol2: u64 = 0;
 
     let input = include_str!("../../input/input11.txt");
     let parsed_input = parse_input(&input);
@@ -86,7 +86,14 @@ pub fn solve() -> SolutionPair {
     let sol1 = calc_all_distances(
         galaxies
             .iter()
-            .map(|galaxy| expand_galaxy(galaxy, &empty_rows, &empty_columns))
+            .map(|galaxy| expand_galaxy(galaxy, &empty_rows, &empty_columns, 1))
+            .collect(),
+    );
+
+    let sol2 = calc_all_distances(
+        galaxies
+            .iter()
+            .map(|galaxy| expand_galaxy(galaxy, &empty_rows, &empty_columns, 999999))
             .collect(),
     );
 
